@@ -1,24 +1,24 @@
-import { ipcRenderer } from "electron";
+import { BrowserWindow, app, webContents } from "electron";
 import { createRoot } from "react-dom/client";
 
 const root = createRoot(document.body);
 root.render(<Main />);
 
+function myfunc() {
+  window.electronAPI.dev();
+}
+
 function Main() {
-  const openDevTools = () => {
-    ipcRenderer.send("devtools");
-  };
   return (
     <div>
-      <div className="w-10 h-10 bg-red-500">
-        <button
-          onClick={() => {
-            openDevTools();
-          }}
-        >
-          Hi
-        </button>
-      </div>
+      <button
+        className="bg-gray-600 border-gray-900 border rounded-md"
+        onClick={() => {
+          myfunc();
+        }}
+      >
+        Hi
+      </button>
     </div>
   );
 }

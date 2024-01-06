@@ -5,6 +5,7 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
+    "tw": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
