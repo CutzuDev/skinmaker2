@@ -1,5 +1,5 @@
 // See the Electron documentation for details on how to use preload scripts:
-const { contextBridge, ipcRenderer } = require("electron");
+import { contextBridge, ipcRenderer } from "electron";
 
 
 // contextBridge.exposeInMainWorld("electronAPI", {
@@ -12,4 +12,7 @@ window.electronAPI = {
   dev: () => {
     ipcRenderer.send("dev");
   },
+  getAppPath: () => {
+    ipcRenderer.send("getAppPath")
+  }
 };
