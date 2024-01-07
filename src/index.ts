@@ -37,11 +37,15 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
   const win = createWindow();
-  ipcMain.on("dev", () => {
-    win.webContents.openDevTools();
+  ipcMain.on("dev", (event, arg) => {
+    if (arg) {
+      win.webContents.openDevTools();
+    } else {
+      win.webContents.closeDevTools();
+    }
   });
   ipcMain.handle("getAppPath", async (event) => {
-    return app.getPath("appData");
+    return app.getAppPath();
   });
 });
 

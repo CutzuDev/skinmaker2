@@ -1,41 +1,45 @@
-import { BrowserWindow, app, ipcRenderer, webContents } from "electron";
-import { readFileSync } from "fs";
-import path from "path";
+import { ipcRenderer } from "electron";
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 
 const root = createRoot(document.body);
 root.render(<Main />);
-// readFileSync(path.join(app.getAppPath(), "./file.txt"));
-
-function myfunc() {
-  window.electronAPI.dev();
-}
-async function testFunc() {
-  // console.log(window.electronAPI.getAppPath());
-  // console.log(await app.getPath("appData"));
-  const appPath = await ipcRenderer.invoke("getAppPath")
-  console.log(appPath)
-}
 
 function Main() {
+  const [appPath, setappPath] = useState();
+  const [devToolsOpen, setDevToolsOpen] = useState(false);
+
+  function enableDev() {
+    setDevToolsOpen(!devToolsOpen);
+    ipcRenderer.send("dev", !devToolsOpen);
+  }
+
+  async function getPath() {
+    const appPath = await ipcRenderer.invoke("getAppPath");
+    console.log(appPath);
+    setappPath(appPath);
+  }
   return (
-    <div>
-      <button
-        className="bg-gray-600 border-gray-900 border rounded-md"
-        onClick={() => {
-          myfunc();
-        }}
-      >
-        Hi
-      </button>
-      <button
-        className="bg-gray-600 border-gray-900 border rounded-md"
-        onClick={() => {
-          testFunc();
-        }}
-      >
-        TEST
-      </button>
-    </div>
+    <>
+      <nav className="w-full p-2.5 bg-sky-900  gap-5 flex justify-center items-center">
+        <button
+          className="px-3 py-1 bg-sky-800 border border-sky-500 rounded-md min-w-20"
+          onClick={() => {
+            enableDev();
+          }}
+        >
+          Dev Tools
+        </button>
+        <button
+          className="px-3 py-1 bg-sky-800 border border-sky-500 rounded-md min-w-20"
+          onClick={() => {
+            getPath();
+          }}
+        >
+          Get Path
+        </button>
+      </nav>
+      <div className="flex flex-col p-2.5">{appPath}</div>
+    </>
   );
 }
